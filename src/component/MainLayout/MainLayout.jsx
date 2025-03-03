@@ -5,6 +5,8 @@ import Slider from '../Slider.jsx/Slider';
 import MiniCart from '../MiniCart/MiniCart';
 import StickerLayout from '../StickerLayout/StickerLayout';
 import DuoCard from '../DuoCard/DuoCard';
+import Banner from '../Cards/Banner';
+import Footer from '../Footer/Footer';
 
 const MainLayout = () => {
   return (
@@ -36,7 +38,7 @@ const MainLayout = () => {
 
         {/* sticker2 */}
         <div className="sticker2 w-full mt-3 border  bg-white">
-         <Slider />
+         <Banner/>
 
         </div>
 
@@ -55,7 +57,9 @@ const MainLayout = () => {
           <StickerLayout />
         </div>
         {/* footer */}
-        <div className="footer w-full  mt-3 border"></div>
+        <div className="footer w-full  mt-3 border">
+          <Footer/>
+        </div>
         
     
     </div>
