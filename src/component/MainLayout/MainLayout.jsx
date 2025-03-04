@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../Navbar/Navbar';
 import Menu from '../Menu/Menu';
 import Slider from '../Slider.jsx/Slider';
@@ -7,8 +7,16 @@ import StickerLayout from '../StickerLayout/StickerLayout';
 import DuoCard from '../DuoCard/DuoCard';
 import Banner from '../Cards/Banner';
 import Footer from '../Footer/Footer';
+import Duo from '../DuoCard/Duo';
 
 const MainLayout = ({items}) => {
+let images=["/storage.webp", "/shoe.webp", "/kurta.webp"]; 
+let images2=["/swash.webp","/swatch.webp","/sjewell.webp"]
+let images3 =["/sbeds.webp","/stea.webp","/slakme.webp"];
+let images4=["/sfly.webp","/sac.webp","/sphoness.webp"]
+    
+ 
+
   return (
     <div className='w-full h-full'>
         {/* nabvar */}
@@ -29,11 +37,11 @@ const MainLayout = ({items}) => {
         </div>
         {/* sticker_1 */}
         <div className="sticker_1 w-full mt-3 bg-white">
-        <StickerLayout/>
+        <StickerLayout images={images} />
         </div>
         {/* duo */}
         <div className="duo w-full  mt-3 bg-white ">
-        <DuoCard/>
+        <DuoCard items={items}/>
         </div>
 
         {/* sticker2 */}
@@ -44,17 +52,15 @@ const MainLayout = ({items}) => {
 
         {/* sticker_3 */}
         <div className="sticker_3 w-full  mt-3 border  bg-white">
-          <StickerLayout />
-          <StickerLayout />
-          <StickerLayout />
+          <StickerLayout images={images2}  />
+          <StickerLayout images={images3} />
+          <StickerLayout images={images4}/>
           
         </div>
 
         {/* brand Directory */}
         <div className="directory w-full mt-3 border  bg-white">
-          <DuoCard />
-          <StickerLayout />
-          <StickerLayout />
+          <Duo items={items} />
         </div>
         {/* footer */}
         <div className="footer w-full  mt-3 border">

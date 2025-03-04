@@ -16,16 +16,16 @@ const MiniCart = ({items}) => {
     console.log(electronics);
     
   return (
-    <div className='grid grid-col-11 mx-4  h-full border overflow-hidden ' >
+    <div className='grid grid-col-11  mx-4 border   h-full  shadow-lg overflow-hidden  ' >
     {/* <div className=" flex justify-center gap-x-16 h-full"></div> */}
     {/* top */}
-    <div className="border col-start-1 col-span-8">
+    <div className="  col-start-1 col-span-8 ">
         {/* Caption */}
-        <div className="w-full">     {/* it should take entire row */}
-            <h1 className='font-bold'> 499 only</h1>
+        <div className="w-full ml-4 mt-2">     {/* it should take entire row */}
+            <h1 className='font-bold text-2xl'>Below 999 only</h1>
             </div>
         {/* card */}
-         <div className="flex justify-center items-center gap-4 ml-2">
+         <div className="flex justify-center items-center gap-1 ml-2">
        
          {lowestPriceItems.map((prod, i) => (
   <SmallCard key={prod.id || i} prod={prod} />
@@ -34,9 +34,9 @@ const MiniCart = ({items}) => {
      
          </div>
     </div>
-    {/* <div className="promo border col-start-9 col-span-2 h-full w-full ml-2 ">
+    <div className="promo border col-start-9 col-span-2 h-full w-full ml-2 ">
       <img src="./air.webp" alt="coupan" className='h-full w-full' />
-    </div> */}
+    </div>
 
 
 {/* bottom */}
@@ -44,10 +44,10 @@ const MiniCart = ({items}) => {
 
            {/* Caption */}
            <div className="col-[1/-1]">
-            <h1 className='font-bold'>499 only</h1>
+            <h1 className='font-bold text-2xl ml-4 mt-2'>Best Deal on Smartphones</h1>
             </div>
         {/* card */}
-         <div className="flex justify-center items-center gap-20 ml-12">
+         <div className="flex justify-center items-center gap-1">
          {electronics.map((prod, i) => (
   <SmallCard key={prod.id || i} prod={prod} />
 ))}
