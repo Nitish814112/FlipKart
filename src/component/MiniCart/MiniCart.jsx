@@ -2,7 +2,19 @@ import React from 'react'
 import '../Navbar/navbar.css'
 import SmallCard from '../Cards/SmallCard'
 
-const MiniCart = () => {
+const MiniCart = ({items}) => {
+  
+  const lowestPriceItems = items
+    .filter((item) => item.price !== undefined) // Exclude items without price
+    .sort((a, b) => a.price - b.price)
+    .slice(0, 6);
+
+    const electronics = items
+    .filter((item) => item.category?.trim().toLowerCase() === 'mobiles') 
+    .slice(0, 7);
+  
+    console.log(electronics);
+    
   return (
     <div className='grid grid-col-11 mx-4  h-full border overflow-hidden ' >
     {/* <div className=" flex justify-center gap-x-16 h-full"></div> */}
@@ -13,19 +25,18 @@ const MiniCart = () => {
             <h1 className='font-bold'> 499 only</h1>
             </div>
         {/* card */}
-         <div className="flex justify-center items-center gap-20 ml-12">
-       <SmallCard/>
-       <SmallCard/>
-       <SmallCard/>
-       <SmallCard/>
-       <SmallCard/>
-       <SmallCard/>
+         <div className="flex justify-center items-center gap-4 ml-2">
+       
+         {lowestPriceItems.map((prod, i) => (
+  <SmallCard key={prod.id || i} prod={prod} />
+))}
+
      
          </div>
     </div>
-    <div className="promo border col-start-9 col-span-2 h-full w-full ml-2 ">
+    {/* <div className="promo border col-start-9 col-span-2 h-full w-full ml-2 ">
       <img src="./air.webp" alt="coupan" className='h-full w-full' />
-    </div>
+    </div> */}
 
 
 {/* bottom */}
@@ -37,13 +48,9 @@ const MiniCart = () => {
             </div>
         {/* card */}
          <div className="flex justify-center items-center gap-20 ml-12">
-         <SmallCard/>
-         <SmallCard/>
-         <SmallCard/>
-         <SmallCard/>
-         <SmallCard/>
-         <SmallCard/>
-         <SmallCard/>
+         {electronics.map((prod, i) => (
+  <SmallCard key={prod.id || i} prod={prod} />
+))}
         
 
         

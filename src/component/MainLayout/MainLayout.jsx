@@ -8,7 +8,7 @@ import DuoCard from '../DuoCard/DuoCard';
 import Banner from '../Cards/Banner';
 import Footer from '../Footer/Footer';
 
-const MainLayout = () => {
+const MainLayout = ({items}) => {
   return (
     <div className='w-full h-full'>
         {/* nabvar */}
@@ -17,7 +17,7 @@ const MainLayout = () => {
         </div>
         {/* menu */}
         <div className="menu   mt-2 overflow-hidden bg-white">
-          <Menu />
+          <Menu items={items} />
         </div>
         {/* slider */}
         <div className="slider w-full mt-3 ">
@@ -25,7 +25,7 @@ const MainLayout = () => {
         </div>
         {/* mini-Cart */}
         <div className="mini-Cart w-full mt-3 overflow-x-hidden bg-white ">
-          <MiniCart />
+          <MiniCart items={items}/>
         </div>
         {/* sticker_1 */}
         <div className="sticker_1 w-full mt-3 bg-white">
