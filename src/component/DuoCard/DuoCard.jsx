@@ -24,7 +24,7 @@ const DuoCard = ({items}) => {
           <h1 className="text-lg font-bold mb-4">Electronics Top Pick</h1>
           <div className="grid grid-cols-2 gap-2">
           {electronics.map((prod, i) => (
-              <SmallCard key={prod.id || i} prod={prod} />
+              <SmallCard key={prod.id || i} prod={prod} items={items} />
            ))}
           </div>
         </div>

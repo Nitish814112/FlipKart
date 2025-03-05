@@ -5,7 +5,7 @@ import SmallCard from '../Cards/SmallCard'
 const MiniCart = ({items}) => {
   
   const lowestPriceItems = items
-    .filter((item) => item.price !== undefined) // Exclude items without price
+    .filter((item) => item.price !== undefined) 
     .sort((a, b) => a.price - b.price)
     .slice(0, 6);
 
@@ -28,7 +28,7 @@ const MiniCart = ({items}) => {
          <div className="flex justify-center items-center gap-1 ml-2">
        
          {lowestPriceItems.map((prod, i) => (
-  <SmallCard key={prod.id || i} prod={prod} />
+  <SmallCard key={prod.id || i} prod={prod} items={items} />
 ))}
 
      
@@ -49,7 +49,7 @@ const MiniCart = ({items}) => {
         {/* card */}
          <div className="flex justify-center items-center gap-1">
          {electronics.map((prod, i) => (
-  <SmallCard key={prod.id || i} prod={prod} />
+  <SmallCard key={prod.id || i} prod={prod} items={items} />
 ))}
         
 

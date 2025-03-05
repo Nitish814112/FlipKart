@@ -1,21 +1,28 @@
-import React from 'react'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const MenuItems = () => {
+const MenuItems = ({ categories, items }) => {
+  const navigate = useNavigate();
+
+  function handleClick(category) {
+    navigate("/product", { state: { category, items } }); // ✅ Pass only clicked category
+  }
+
   return (
     <div className="bg-white shadow-md p-3 flex justify-center">
-        <div className="flex flex-wrap justify-center space-x-4 md:space-x-6 text-sm font-semibold text-center">
-          <span className="cursor-pointer">Electronics</span>
-          <span className="cursor-pointer">TVs & Appliances</span>
-          <span className="cursor-pointer">Men</span>
-          <span className="cursor-pointer">Women</span>
-          <span className="cursor-pointer">Baby & Kids</span>
-          <span className="cursor-pointer">Home & Furniture</span>
-          <span className="cursor-pointer">Sports, Books & More</span>
-          <span className="cursor-pointer">Flights</span>
-          <span className="cursor-pointer">Offer Zone</span>
-        </div>
+      <div className="flex flex-wrap justify-center space-x-4 md:space-x-6 text-sm font-semibold text-center">
+        {categories.map((category, i) => (
+          <span
+            className="cursor-pointer"
+            key={i}
+            onClick={() => handleClick(category)} // ✅ Pass category dynamically
+          >
+            {category}
+          </span>
+        ))}
       </div>
-  )
-}
+    </div>
+  );
+};
 
-export default MenuItems
+export default MenuItems;

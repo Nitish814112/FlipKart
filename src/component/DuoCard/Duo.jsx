@@ -24,7 +24,7 @@ const Duo = ({items}) => {
           <h1 className="text-lg font-bold mb-4">Shoes Top Pick</h1>
           <div className="grid grid-cols-2 gap-2">
           {shoes.map((prod, i) => (
-              <SmallCard key={prod.id || i} prod={prod} />
+              <SmallCard key={prod.id || i} prod={prod} items={items} />
            ))}
           </div>
         </div>
@@ -34,7 +34,7 @@ const Duo = ({items}) => {
           <h1 className="text-lg font-bold mb-4">Appliances Top Pick</h1>
           <div className="grid grid-cols-2 gap-2">
           {appliances.map((prod, i) => (
-              <SmallCard key={prod.id || i} prod={prod} />
+              <SmallCard key={prod.id || i} prod={prod} items={items} />
            ))}
           </div>
         </div>
@@ -44,7 +44,7 @@ const Duo = ({items}) => {
           <h1 className="text-lg font-bold mb-4">Women's Top Pick</h1>
           <div className="grid grid-cols-2 gap-2">
           {women.map((prod, i) => (
-              <SmallCard key={prod.id || i} prod={prod} />
+              <SmallCard key={prod.id || i} prod={prod} items={items} />
            ))}
           </div>
         </div>

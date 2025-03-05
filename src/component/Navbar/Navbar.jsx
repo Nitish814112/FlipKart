@@ -10,7 +10,7 @@ const Navbar = () => {
         </div>
         {/* logo */}
         <div className=" md:col-start-1 flip_logo mt-2 ">
-          <img src="./logo.svg" alt="" className='' width={'140px'} height={'140px'} />
+          <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt="" className='' width={'140px'} height={'140px'} />
         </div>
         {/* search */}
         <div className="searchbar   sm:col-start-2 sm:col-span-4 rounded-lg bg-blue-50">

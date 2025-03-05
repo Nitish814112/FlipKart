@@ -18,7 +18,7 @@ console.log(categories);
     <div className='grid grid-col-11 m-4 border shadow-lg py-4  ' >
         <div className=" flex justify-center gap-x-16 w-full px-3 ">
         {categories.map((category, index) => (
-          <SmallMenu key={index} category={category} index={index} />
+          <SmallMenu key={index} category={category} index={index} items={items} />
         ))}
 
         </div>
