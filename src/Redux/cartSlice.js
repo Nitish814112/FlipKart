@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // API Base URL
-const API_URL = "http://localhost:5000";
+const API_URL = "https://flip-backend-oi9l.onrender.com";
 
 // Fetch Cart Items
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (_, { rejectWithValue }) => {

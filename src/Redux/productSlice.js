@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Async Thunk to Fetch Products
 export const fetchProducts = createAsyncThunk("products/fetch", async () => {
-  const response = await fetch("https://flipcart-backend-1.onrender.com/data");
+  const response = await fetch("https://flip-backend-oi9l.onrender.com/data");
   if (!response.ok) {
     throw new Error("Failed to fetch products");
   }

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "https://flip-backend-oi9l.onrender.com";
 
 // Login User (Request OTP)
 export const loginUser = createAsyncThunk("user/login", async (email, { rejectWithValue }) => {
