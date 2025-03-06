@@ -8,6 +8,8 @@ const DuoCard = ({items}) => {
 
   let electronics =items.filter((prod)=>prod.category==='Electronics').slice(0,4);
   let furniture =items.filter((prod)=>prod.category==='Furniture').slice(0,4);
+  console.log("furniture",furniture);
+  
   let toys =items.filter((prod)=>prod.category==='Toys').slice(0,4);
 
   console.log("electronics",electronics);
@@ -34,7 +36,7 @@ const DuoCard = ({items}) => {
           <h1 className="text-lg font-bold mb-4">Furniture Top Pick</h1>
           <div className="grid grid-cols-2 gap-2">
           {furniture.map((prod, i) => (
-              <SmallCard key={prod.id || i} prod={prod} />
+              <SmallCard key={prod.id || i} prod={prod} items={items}/>
            ))}
           </div>
         </div>
@@ -44,7 +46,7 @@ const DuoCard = ({items}) => {
           <h1 className="text-lg font-bold mb-4">Toys Top Pick</h1>
           <div className="grid grid-cols-2 gap-2">
           {toys.map((prod, i) => (
-              <SmallCard key={prod.id || i} prod={prod} />
+              <SmallCard key={prod.id || i} prod={prod} items={items} />
            ))}
           </div>
         </div>

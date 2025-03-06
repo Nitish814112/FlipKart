@@ -1,60 +1,72 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart, removeFromCart, updateQuantity } from "../Redux/cartSlice";
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([]);
-
-  async function fetchCartData() {
-    let response = await fetch('https://flipcart-backend-1.onrender.com/cart');
-    let data = await response.json();
-    setCartItems(data);
-  }
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
 
   useEffect(() => {
-    fetchCartData();
-  }, []);
+    dispatch(fetchCart()); // Fetch cart items when the page loads
+  }, [dispatch]);
+
+  // ✅ Handle Increment Quantity
+  const handleIncrement = (item) => {
+    console.log("Increment button clicked for:", item); // ✅ Debugging log
+    dispatch(updateQuantity({ productId: item._id, quantity: item.quantity + 1 }));
+  };
+
+  // ✅ Handle Decrement Quantity (Removes item if quantity reaches 0)
+  const handleDecrement = (item) => {
+    if (item.quantity > 1) {
+      dispatch(updateQuantity({ productId: item._id, quantity: item.quantity - 1 }));
+    } else {
+      dispatch(removeFromCart(item._id)); // If quantity is 1, remove item
+    }
+  };
+
+  // ✅ Handle Remove Item
+  const handleRemove = (productId) => {
+    dispatch(removeFromCart(productId));
+  };
 
   return (
-    <div className="w-full min-h-screen bg-gray-100 p-4">
-      <div className="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-semibold mb-4">Shopping Cart</h1>
-        {cartItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Cart Items */}
-            <div className="md:col-span-2">
-              {cartItems.map((item, index) => (
-                <div key={index} className="flex items-center border-b py-4">
-                  <img src={item.image} alt={item.name} className="w-24 h-24 object-cover" />
-                  <div className="ml-4 flex-1">
-                    <h2 className="text-lg font-semibold">{item.name}</h2>
-                    <p className="text-sm text-gray-500">{item.category} | {item.brand}</p>
-                    <p className="text-green-600 font-semibold">₹{item.price}</p>
-                    <div className="mt-2 flex items-center space-x-2">
-                      <button className="border px-2 py-1">-</button>
-                      <span className="px-3">{item.quantity}</span>
-                      <button className="border px-2 py-1">+</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+    <div className="max-w-4xl mx-auto p-4">
+      <h2 className="text-center text-2xl font-bold my-4">Your Cart</h2>
+      
+      {cartItems.length > 0 ? (
+        cartItems.map((item) => (
+          <div key={item._id} className="flex items-center justify-between border p-4 my-2 bg-white shadow-md rounded-lg">
+            {/* Product Image */}
+            <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-md" />
+
+            {/* Product Details */}
+            <div className="flex-1 ml-4">
+              <h3 className="font-semibold">{item.name}</h3>
+              <p className="text-gray-600">Price: ₹{item.price}</p>
+              <p className="text-gray-600">Total: ₹{item.price * item.quantity}</p>
             </div>
 
-            {/* Price Details */}
-            <div className="bg-gray-50 p-4 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">Price Details</h2>
-              <div className="text-sm">
-                <p className="flex justify-between"><span>Price ({cartItems.length} items)</span> <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</span></p>
-                <p className="flex justify-between text-green-600"><span>Discount</span> <span>-₹500</span></p>
-                <p className="flex justify-between"><span>Delivery Charges</span> <span className="text-green-600">Free</span></p>
-                <hr className="my-2" />
-                <p className="flex justify-between font-semibold"><span>Total Amount</span> <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0) - 500}</span></p>
-              </div>
-              <button className="mt-4 w-full bg-orange-500 text-white py-2 rounded-md font-semibold">PLACE ORDER</button>
+            {/* Quantity Controls */}
+            <div className="flex items-center space-x-3">
+              <button onClick={() => handleDecrement(item)} className="bg-gray-300 px-3 py-1 rounded">
+                -
+              </button>
+              <span className="text-lg font-semibold">{item.quantity}</span>
+              <button onClick={() => handleIncrement(item)} className="bg-gray-300 px-3 py-1 rounded">
+                +
+              </button>
             </div>
+
+            {/* Remove Button */}
+            <button onClick={() => handleRemove(item._id)} className="bg-red-500 text-white px-4 py-2 rounded">
+              Remove
+            </button>
           </div>
-        ) : (
-          <p className="text-center text-gray-500">Your cart is empty.</p>
-        )}
-      </div>
+        ))
+      ) : (
+        <p className="text-center text-gray-500">Your cart is empty.</p>
+      )}
     </div>
   );
 };

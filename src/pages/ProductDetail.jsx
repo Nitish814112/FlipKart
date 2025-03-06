@@ -1,19 +1,59 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../Redux/cartSlice"; // Import Redux action
 import ProductCard from "../component/Cards/ProductCard";
 
 const ProductDetail = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
   const { prod, items } = location.state || {}; // ✅ Handle undefined state
   const [product, setProduct] = useState(null);
-  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedSize, setSelectedSize] = useState("");
+  const isLoggedIn = useSelector((state) => state.user.email !== null); // ✅ Get login status from Redux
+
 
   let relatedData = items.filter(
     (relatedProduct) =>
-      relatedProduct.category === prod.category && relatedProduct.product_id !==prod.product_id
+      relatedProduct.category === prod.category && relatedProduct.product_id !== prod.product_id
   );
 
-  console.log("relatedData",relatedData); // it has no product
+  // ✅ Updated handleAddToCart Function
+  function handleAddToCart() {
+    if (!isLoggedIn) {
+      alert("Please log in to add items to your cart."); // ✅ Alert if user is not logged in
+      return;
+    }
+  
+    if (product?.size?.length > 0 && !selectedSize) {
+      alert("Please select a size before adding to cart."); // ✅ Alert if size is not selected
+      return;
+    }
+  
+    // ✅ Check if product is already in the cart
+    const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const isProductInCart = existingCart.some(
+      (item) => item._id === product._id && item.size === (selectedSize || "Default")
+    );
+  
+    if (isProductInCart) {
+      alert("You have the same product in your cart."); // ✅ Alert if product is already in cart
+      return;
+    }
+  
+    // ✅ Create cart item object
+    const cartItem = {
+      ...product,
+      size: selectedSize || "Default",
+      quantity: 1,
+    };
+  
+    dispatch(addToCart(cartItem))
+      .unwrap()
+      .then(() => alert("Product added to cart!")) // ✅ Alert on success
+      .catch((error) => alert(error)); // ✅ Alert on error
+  }
+  
   
 
   useEffect(() => {
@@ -22,8 +62,7 @@ const ProductDetail = () => {
     }
   }, [prod]);
 
-  if (!product)
-    return <div className="text-center mt-10 text-xl">Loading...</div>;
+  if (!product) return <div className="text-center mt-10 text-xl">Loading...</div>;
 
   return (
     <div className="max-w-5xl mx-auto p-4">
@@ -31,9 +70,9 @@ const ProductDetail = () => {
         {/* Product Image */}
         <div className="flex justify-center text-center h-[250px] w-[400px]">
           <img
-            src={product?.image || "/images/default.png"} // ✅ Use fallback image
+            src={product?.image || "/images/default.png"}
             alt={product?.name || "Product Image"}
-            className="rounded-lg shadow-lg ml-40 "
+            className="rounded-lg shadow-lg ml-40"
           />
         </div>
 
@@ -51,19 +90,25 @@ const ProductDetail = () => {
               <span className="font-semibold">Available Sizes: </span>
               <select
                 className="ml-2 p-1 border rounded-lg"
-                value={selectedSize || ""}
+                value={selectedSize}
                 onChange={(e) => setSelectedSize(e.target.value)}
               >
-                <option value="" disabled>Select Size</option>
+                <option value="" disabled>
+                  Select Size
+                </option>
                 {product.size.map((size, index) => (
-                  <option key={index} value={size}>{size}</option>
+                  <option key={index} value={size}>
+                    {size}
+                  </option>
                 ))}
               </select>
             </div>
           )}
 
           {/* Pricing */}
-          <div className="mt-4 text-xl font-semibold text-green-600">₹{product?.price || "N/A"}</div>
+          <div className="mt-4 text-xl font-semibold text-green-600">
+            ₹{product?.price || "N/A"}
+          </div>
           {product?.originalPrice && (
             <div className="text-gray-500 line-through">₹{product.originalPrice}</div>
           )}
@@ -74,7 +119,10 @@ const ProductDetail = () => {
             <button className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">
               Buy Now
             </button>
-            <button className="bg-gray-200 text-black px-6 py-2 rounded-lg hover:bg-gray-300">
+            <button
+              className="bg-gray-200 text-black px-6 py-2 rounded-lg hover:bg-gray-300"
+              onClick={handleAddToCart}
+            >
               Add to Cart
             </button>
           </div>
