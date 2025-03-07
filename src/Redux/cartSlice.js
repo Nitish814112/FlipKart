@@ -46,13 +46,12 @@ export const addToCart = createAsyncThunk("cart/addToCart", async (product, { re
   }
 });
 
-
 // ✅ Update Cart Quantity
 export const updateQuantity = createAsyncThunk(
   "cart/updateQuantity",
   async ({ productId, quantity }, { rejectWithValue }) => {
     try {
-      console.log("Dispatching updateQuantity for:", productId, "with quantity:", quantity); // ✅ Debugging log
+      console.log("Dispatching updateQuantity for:", productId, "with quantity:", quantity);
 
       const token = localStorage.getItem("authToken");
       const response = await fetch(`${API_URL}/cart/update/${productId}`, {
@@ -61,10 +60,10 @@ export const updateQuantity = createAsyncThunk(
         body: JSON.stringify({ quantity }),
       });
 
-      console.log("API Response Status:", response.status); // ✅ Debugging log
+      console.log("API Response Status:", response.status);
 
       const data = await response.json();
-      console.log("API Response Data:", data); // ✅ Debugging log
+      console.log("API Response Data:", data);
 
       if (!response.ok) return rejectWithValue(data.error || "Failed to update quantity");
 
@@ -76,8 +75,24 @@ export const updateQuantity = createAsyncThunk(
   }
 );
 
+// ✅ Fix: Ensure emptyCart properly updates state
+export const emptyCart = createAsyncThunk("cart/emptyCart", async (_, { rejectWithValue }) => {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) return rejectWithValue("User not logged in.");
 
+    const response = await fetch('https://flip-backend-oi9l.onrender.com/cart/empty', {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
+    if (!response.ok) return rejectWithValue("Failed to empty cart");
+
+    return []; // ✅ Return an empty array
+  } catch (error) {
+    return rejectWithValue(error.message);
+  }
+});
 
 // Remove from Cart
 export const removeFromCart = createAsyncThunk(
@@ -102,7 +117,6 @@ export const removeFromCart = createAsyncThunk(
     }
   }
 );
-
 
 const initialState = {
   items: JSON.parse(localStorage.getItem("cartItems")) || [],
@@ -145,7 +159,16 @@ const cartSlice = createSlice({
         state.items = state.items.filter((item) => item._id !== action.payload);
         localStorage.setItem("cartItems", JSON.stringify(state.items));
       })
-      .addCase(removeFromCart.rejected, (state, action) => { state.isError = action.payload; });
+      .addCase(removeFromCart.rejected, (state, action) => { state.isError = action.payload; })
+
+      // ✅ Ensure cart is cleared on emptyCart success
+      .addCase(emptyCart.fulfilled, (state) => {
+        state.items = []; // ✅ Reset cart state
+        localStorage.setItem("cartItems", JSON.stringify([])); // ✅ Clear localStorage
+      })
+      .addCase(emptyCart.rejected, (state, action) => {
+        state.isError = action.payload;
+      });
   },
 });
 

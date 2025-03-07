@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../Redux/cartSlice"; // Import Redux action
 import ProductCard from "../component/Cards/ProductCard";
+import { toast } from "react-toastify";
 
 const ProductDetail = () => {
   const location = useLocation();
@@ -21,12 +22,12 @@ const ProductDetail = () => {
   // ✅ Updated handleAddToCart Function
   function handleAddToCart() {
     if (!isLoggedIn) {
-      alert("Please log in to add items to your cart."); // ✅ Alert if user is not logged in
+      toast.warning("Please log in to add items to your cart."); // ✅ Alert if user is not logged in
       return;
     }
   
     if (product?.size?.length > 0 && !selectedSize) {
-      alert("Please select a size before adding to cart."); // ✅ Alert if size is not selected
+      toast.warning("Please select a size before adding to cart."); // ✅ Alert if size is not selected
       return;
     }
   
@@ -37,7 +38,7 @@ const ProductDetail = () => {
     );
   
     if (isProductInCart) {
-      alert("You have the same product in your cart."); // ✅ Alert if product is already in cart
+      toast.warning("You have the same product in your cart."); // ✅ Alert if product is already in cart
       return;
     }
   
@@ -50,8 +51,8 @@ const ProductDetail = () => {
   
     dispatch(addToCart(cartItem))
       .unwrap()
-      .then(() => alert("Product added to cart!")) // ✅ Alert on success
-      .catch((error) => alert(error)); // ✅ Alert on error
+      .then(() => toast.success("Product added to cart!")) // ✅ Alert on success
+      .catch((error) => toast.error(error)); // ✅ Alert on error
   }
   
   

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+
 const SmallCard = ({ prod,items }) => {
   const navigate = useNavigate();
   if (!prod) return null;

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, verifyOtp } from "../Redux/userSlice";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const Login = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
@@ -12,13 +14,13 @@ const Login = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const handleLogin = async () => {
-    if (!email) return alert("Please enter an email!");
+    if (!email) return toast.warning("Please enter an email!");
 
     dispatch(loginUser(email)).then((res) => {
       if (!res.error) {
         setOtpSent(true); // Show OTP input field
       } else {
-        alert(res.payload || "Login failed, please try again.");
+        toast.error(res.payload || "Login failed, please try again.");
       }
     });
   };
@@ -28,10 +30,10 @@ const Login = ({ isOpen, onClose }) => {
 
     dispatch(verifyOtp({ email, otp })).then((res) => {
       if (!res.error) {
-        alert("Login successful!");
+        toast.success("Login successful!");
         onClose(); // Close modal on successful login
       } else {
-        alert(res.payload || "Invalid OTP, please try again.");
+        toast.error(res.payload || "Invalid OTP, please try again.");
       }
     });
   };
@@ -42,7 +44,7 @@ const Login = ({ isOpen, onClose }) => {
         {/* Left Side Image */}
         <div className="bg-blue-600">
           <img
-            src="../login.png"
+            src={`${process.env.PUBLIC_URL}/login.png`}
             alt="Login"
             className="md:w-[250px] md:h-[550px] w-[200px] h-[400px] object-fit"
           />

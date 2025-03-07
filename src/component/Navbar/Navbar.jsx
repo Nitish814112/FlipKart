@@ -1,61 +1,63 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../../Redux/userSlice";
-import Login from "../../pages/Login"; // Import the Login modal
-import { addToCart } from "../../Redux/cartSlice"; // ✅ Import addToCart action
+import Login from "../../pages/Login";
+import { setSearchQuery, searchProducts } from "../../Redux/searchSlice"; // ✅ Fixed import
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { email } = useSelector((state) => state.user); // ✅ Get user email
-  const cartItems = useSelector((state) => state.cart.items); // ✅ Get cart items
+  const { email } = useSelector((state) => state.user);
+  const cartItems = useSelector((state) => state.cart.items);
+  const products = useSelector((state) => state.products.items); // ✅ Get all products
 
-  // Extract username before @
-  const username = email ? email.split("@")[0] : "";
-
-  // State for Login Modal
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  const isLoggedIn = !!email; // ✅ Check if user is logged in
+  const isLoggedIn = !!email;
+  const username = email ? email.split("@")[0] : "";
 
-  const handleLoginClick = () => {
-    setIsLoginOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsLoginOpen(false);
-  };
-
-  const handleLogout = () => {
-    dispatch(logoutUser());
-  };
+  const handleLoginClick = () => setIsLoginOpen(true);
+  const handleCloseModal = () => setIsLoginOpen(false);
+  const handleLogout = () => dispatch(logoutUser());
 
   const handleCartClick = () => {
-    navigate("/cart", { state: { cartItems } }); // ✅ Navigate to cart
+    if (isLoggedIn) navigate("/cart", { state: { cartItems } });
+    else toast.warning("Please log in to view your cart.");
   };
 
-  // ✅ Prevent adding items when user is logged out
-  const handleAddToCart = (product) => {
-    if (!isLoggedIn) {
-      alert("Please log in to add items to your cart."); // ✅ Show alert
-      return;
+  // ✅ Handle Search Functionality
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    dispatch(setSearchQuery(value));
+
+    if (value.trim() !== "") {
+      const filteredResults = products.filter((prod) =>
+        ["name", "brand", "category"].some((key) =>
+          prod[key]?.toLowerCase().includes(value.toLowerCase()) // ✅ Safe optional chaining
+        )
+      );
+
+      dispatch(searchProducts({ products, query: value })); // ✅ Redux Update
+      navigate("/product", { state: { searchResults: filteredResults } });
     }
-    dispatch(addToCart(product)); // ✅ Add to cart
   };
 
   return (
     <>
-      <div className="grid grid-cols-5 md:grid md:grid-cols-6 lg:grid lg:grid-col-6 py-4 shadow-sm">
+      <div className="grid grid-cols-5 md:grid-cols-6 lg:grid-cols-6 py-4 shadow-sm">
         {/* Logo */}
         <div className="md:col-start-1 flip_logo mt-2">
-          <img
+         <a href="/"> <img
             src={`${process.env.PUBLIC_URL}/logo.svg`}
             alt="Flipkart"
             width={"140px"}
             height={"140px"}
-          />
+          /></a>
         </div>
 
         {/* Search */}
@@ -66,6 +68,8 @@ const Navbar = () => {
             </span>
             <input
               type="search"
+              value={searchTerm}
+              onChange={handleSearch}
               placeholder="Search for Products, Brands and More"
               className="w-full ml-4 bg-blue-50 outline-none text-xl"
             />
@@ -85,17 +89,17 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Cart Section ✅ */}
+        {/* Cart Section */}
         <div className="col-start-7 col-end-7 md:col-start-7">
           <div
             className="flex gap-2 items-center ml-4 w-32 justify-center h-full cursor-pointer"
-            onClick={isLoggedIn ? handleCartClick : () => alert("Please log in to view your cart.")} 
+            onClick={handleCartClick}
           >
             <div className="relative">
               <i className="fa-solid fa-cart-flatbed-suitcase text-2xl"></i>
               {isLoggedIn && cartItems.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                  {cartItems.length} {/* ✅ Show count only if logged in */}
+                  {cartItems.length}
                 </span>
               )}
             </div>
