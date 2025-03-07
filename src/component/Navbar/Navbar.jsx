@@ -29,6 +29,8 @@ const Navbar = () => {
     else toast.warning("Please log in to view your cart.");
   };
 
+  console.log();
+  
   // ✅ Handle Search Functionality
   const handleSearch = (e) => {
     const value = e.target.value;
